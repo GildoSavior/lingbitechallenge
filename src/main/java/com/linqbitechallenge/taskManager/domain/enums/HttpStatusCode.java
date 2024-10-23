@@ -4,7 +4,7 @@ package com.linqbitechallenge.taskManager.domain.enums;
 import lombok.Getter;
 
 @Getter
-public enum StatusCode {
+public enum HttpStatusCode {
     OK(200),
     CREATED(201),
     NO_CONTENT(204),
@@ -18,7 +18,7 @@ public enum StatusCode {
 
     private final int code;
 
-    StatusCode(int code) {
+    HttpStatusCode(int code) {
         this.code = code;
     }
 

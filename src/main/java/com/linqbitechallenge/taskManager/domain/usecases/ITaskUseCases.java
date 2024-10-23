@@ -14,9 +14,9 @@ public interface  ITaskUseCases {
 
     Result<Task> getById(String id);
 
+    Result<List<Task>> getByStatus(int statusTask);
+
     Result<Task> update(String strId, Task task);
 
     Result<String> delete(String id);
-
-    Result<List<Task>> getByStatus(int statusTask);
 }
