@@ -31,7 +31,7 @@ public class TaskInteractor implements ITaskUseCases {
                 return Result.failure("A Data de Conclusão não pode ser inferior à Data de Crição");
             }
 
-            if(!status_Task_Exists(task.getStatusTask().getCode())) {
+            if(!existsStatusTask(task.getStatusTask().getCode())) {
                 return Result.
                         failure("O estado que está a ser inserido não exite, deve colocar um dos seguintes estados: " +
                                 "PENDENTE(0), EM_PROGRESSO(1), CONCLUIDA(2)");
@@ -56,9 +56,10 @@ public class TaskInteractor implements ITaskUseCases {
              if(tasks.isEmpty()) {
                  return Result.failure("Não há nenhuma tarefa registada no sistema");
              }
+
              return  Result.success(tasks);
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             return Result.failure("Erro ao buscar tarefas: " + e.getMessage());
         }
     }
@@ -78,8 +79,27 @@ public class TaskInteractor implements ITaskUseCases {
 
             return  Result.success(task);
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             return Result.failure("Erro ao buscar tarefa por Id: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public Result<List<Task>> getByStatus(int statusTask) {
+        try {
+            List<Task> tasks;
+
+            StatusTask code = fromInt(statusTask);
+
+            tasks = repository.getByStatus(code);
+
+            if(tasks.isEmpty()) {
+                return Result.failure("Não há nenhuma tarefa no estado: " + code.name());
+            }
+            return  Result.success(tasks);
+
+         }catch (Exception e) {
+            return Result.failure("Erro ao buscar tarefas: " + e.getMessage());
         }
     }
 
@@ -87,6 +107,8 @@ public class TaskInteractor implements ITaskUseCases {
     public Result<Task> update(String strId, Task task) {
         try {
             UUID id = UUID.fromString(strId);
+
+            if(strId.isEmpty()) return Result.failure("O Id da tarefa deve estar preenchido");
 
             if(!existsTask(id)) return Result.failure("Não existe nenhuma tarefa com o Id inserido");
 
@@ -98,7 +120,7 @@ public class TaskInteractor implements ITaskUseCases {
                 return Result.failure("A Data de Conclusão não pode ser inferior à Data de Crição");
             }
 
-            if(!status_Task_Exists(task.getStatusTask().getCode())) {
+            if(!existsStatusTask(task.getStatusTask().getCode())) {
                 return Result.
                         failure("O estado que está a ser inserido não exite, deve colocar um dos seguintes estados: " +
                                 "PENDENTE(0), EM_PROGRESSO(1), CONCLUIDA(2)");
@@ -129,37 +151,18 @@ public class TaskInteractor implements ITaskUseCases {
 
             return Result.success(null);
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             return Result.failure("Erro ao buscar tarefa por Id: " + e.getMessage());
         }
     }
 
-    @Override
-    public Result<List<Task>> getByStatus(int statusTask) {
-        try {
-            List<Task> tasks;
-
-            StatusTask code = fromInt(statusTask);
-
-            tasks = repository.getByStatus(code);
-
-            if(tasks.isEmpty()) {
-                return Result.failure("Não há nenhuma tarefa no estado: " + code.name());
-            }
-            return  Result.success(tasks);
-
-        }catch (Exception e) {
-            return Result.failure("Erro ao buscar tarefas: " + e.getMessage());
-        }
-    }
-
-
-    private boolean status_Task_Exists(int code) {
+    private boolean existsStatusTask(int code) {
         for (StatusTask status : StatusTask.values()) {
             if (status.getCode() == code) {
                 return true;
             }
         }
+
         return false;
     }
 

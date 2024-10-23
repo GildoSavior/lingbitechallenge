@@ -12,13 +12,15 @@ public interface ITaskRepository {
 
     Task save(Task task);
 
-     List<Task> getAll();
+    List<Task> getAll();
 
-     Task getById(UUID id);
+    Task getById(UUID id);
 
-     Task update(UUID id, Task taskUpdated);
+    List<Task> getByStatus(StatusTask statusTask);
+
+    Task update(UUID id, Task taskUpdated);
 
     void delete(UUID id) ;
 
-     List<Task> getByStatus(StatusTask statusTask);
+
 }

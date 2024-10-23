@@ -13,5 +13,4 @@ public enum StatusTask {
     StatusTask(int code) {
         this.code = code;
     }
-
 }

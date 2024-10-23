@@ -43,6 +43,15 @@ public class TaskRepository implements ITaskRepository {
     }
 
     @Override
+    public List<Task> getByStatus(StatusTask statusTask) {
+        List<Task> tasks = jpaRepository.findAll();
+
+        return tasks.stream()
+                .filter(task -> task.getStatusTask().getCode() == statusTask.getCode())
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Task update(UUID id, Task taskUpdated) {
         Optional<Task> optionalTask = jpaRepository.findById(id);
         Task task = optionalTask.orElse(new Task());
@@ -59,18 +68,10 @@ public class TaskRepository implements ITaskRepository {
     public void delete(UUID id) {
         Task task = jpaRepository.findById(id).orElse(null);
 
-
         assert task != null;
         jpaRepository.delete(task);
     }
 
-    @Override
-    public List<Task> getByStatus(StatusTask statusTask) {
-        List<Task> tasks = jpaRepository.findAll();
 
-        return tasks.stream()
-                .filter(task -> task.getStatusTask().getCode() == statusTask.getCode())
-                .collect(Collectors.toList());
-    }
 
 }
