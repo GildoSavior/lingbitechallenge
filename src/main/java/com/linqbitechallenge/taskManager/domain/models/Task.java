@@ -35,5 +35,4 @@ public class Task {
         this.dataConclusao = dataConclusao;
         this.statusTask = statusTask;
     }
-
 }

@@ -5,6 +5,7 @@ import com.linqbitechallenge.taskManager.domain.enums.StatusTask;
 import com.linqbitechallenge.taskManager.domain.repository.ITaskRepository;
 import com.linqbitechallenge.taskManager.domain.models.Task;
 import com.linqbitechallenge.taskManager.domain.usecases.ITaskUseCases;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,11 +32,6 @@ public class TaskInteractor implements ITaskUseCases {
                 return Result.failure("A Data de Conclusão não pode ser inferior à Data de Crição");
             }
 
-            if(!existsStatusTask(task.getStatusTask().getCode())) {
-                return Result.
-                        failure("O estado que está a ser inserido não exite, deve colocar um dos seguintes estados: " +
-                                "PENDENTE(0), EM_PROGRESSO(1), CONCLUIDA(2)");
-            }
 
             Task createdTask =  repository.save(task);
 
@@ -119,13 +115,6 @@ public class TaskInteractor implements ITaskUseCases {
             if(task.getDataConclusao() != null && task.getDataConclusao().isBefore(task.getDataCriacao())){
                 return Result.failure("A Data de Conclusão não pode ser inferior à Data de Crição");
             }
-
-            if(!existsStatusTask(task.getStatusTask().getCode())) {
-                return Result.
-                        failure("O estado que está a ser inserido não exite, deve colocar um dos seguintes estados: " +
-                                "PENDENTE(0), EM_PROGRESSO(1), CONCLUIDA(2)");
-            }
-
 
             Task updatedTask =  repository.update(id, task);
 
